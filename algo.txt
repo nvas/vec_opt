@@ -1,0 +1,8 @@
+1. Define the Complex Vector w: 
+  - Create a complex vector with dimensions 256 × 1 256×1.
+2. Define the Complex Array α(θ,ϕ): 
+  - Create a complex 3D array with dimensions 256 × 361 × 91 256×361×91.
+3. Compute the Conjugate Transpose of w
+  - This is w^H , the Hermitian (complex conjugate transpose) of w
+4. Perform the Matrix Multiplication: 
+  - Multiply w^H with α(θ,ϕ)
