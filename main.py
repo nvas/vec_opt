@@ -1,42 +1,56 @@
-import numpy as np
-import matplotlib.pyplot as plt
+#!/usr/bin/env python3
+"""
+Author: Sajid Fadlelseed
+Date: 2024-07-23
+Description: This script runs the optimiser based on the dimensions providedi the config.yaml file.
 
-from debug import debug
+Usage:
+    python main.py
+"""
 
-'''
-1. Define the Complex Vector w: 
-  - Create a complex vector with dimensions 256×1.
-2. Define the Complex Array α(θ,ϕ): 
-  - Create a complex 3D array with dimensions 256×361×91.
-3. Compute the Conjugate Transpose of w
-  - This is w^H , the Hermitian (complex conjugate transpose) of w
-4. Perform the Matrix Multiplication: 
-  - Multiply w^H with α(θ,ϕ)
-'''
-# ====================================================
-# alpha dimensions
-alpha_dim1 = 256
-alpha_dim2 = 361
-alpha_dim3 = 91
-# ====================================================
-w       = np.random.random((256, 1)) + 1j * np.random.random((256, 1))          # Define the Complex Vector w
-alpha   = np.zeros((alpha_dim1, alpha_dim2, alpha_dim3), dtype=np.complex128)   # Define the Complex Array α(θ,ϕ)
-F0      = np.empty((361, 91), dtype=np.complex128)                              # Define the target binary matrix
-# ====================================================
-# 3 Compute the Hermitian transpose (conjugate transpose) of w
-w_H = np.conjugate(w.T)
-# ====================================================
-# 4 Perform the Matrix Multiplication:
-# For each θ and ϕ pair, you will multiply w_H with the corresponding slice of αlpha:
-for theta in range(alpha_dim2):
-    for phi in range(alpha_dim3):
-        # Extract the 256x1 slice for given theta, phi
-        alpha_slice = alpha[:, theta, phi].reshape(-1, 1)
-        # Compute the matrix product
-        F0[theta, phi] = np.dot(w_H, alpha_slice)
-        debug()
- 
-
-np.savetxt()
+import argparse
+import optimiser
+import subprocess
 
 
+
+def parse_arguments():
+    """Parse and return command-line arguments."""
+    parser = argparse.ArgumentParser(
+        description='This script performs gradient descent optimisation based on a specified configuration file. '
+                    'It initialises variables, defines constants, and carries out the optimisation process '
+                    'with dimensions specified in the configuration file.'
+    )
+    return parser.parse_args()
+
+
+def run_installation_script():
+    """Run the installation script with the provided path."""
+    try:
+        result = subprocess.run(
+            ['python', '-W', 'ignore::DeprecationWarning', 'install_packages.py'],
+            check=True,  # This will raise an exception if the command fails
+            text=True    # This ensures the output is captured as a string
+        )
+        # print("Output:", result.stdout)
+    except subprocess.CalledProcessError as e:
+        print("An error occurred while running the installation script.")
+        print("Error message:", e.stderr)
+
+def main(args):
+
+    # Install missing packages
+    run_installation_script()
+
+    # Load configuration
+    opt = optimiser.GradientDescentoptimiser('config.yaml')
+
+    # Run optimisation
+    opt.run()
+
+if __name__ == '__main__':
+    # Parse arguments
+    args = parse_arguments()
+    
+    # Call the main function with parsed arguments
+    main(args)

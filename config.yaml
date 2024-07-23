@@ -1,0 +1,12 @@
+# config.yaml
+dimensions:
+  alpha:
+    dim1: 256
+    dim2: 361
+    dim3: 91
+  w:
+    dim1: 256
+    dim2: 1
+  F0:
+    dim1: 361
+    dim2: 91
