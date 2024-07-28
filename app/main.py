@@ -10,7 +10,7 @@ Usage:
 
 import argparse
 import optimiser
-import subprocess
+
 
 
 
@@ -24,23 +24,10 @@ def parse_arguments():
     return parser.parse_args()
 
 
-def run_installation_script():
-    """Run the installation script with the provided path."""
-    try:
-        result = subprocess.run(
-            ['python', '-W', 'ignore::DeprecationWarning', 'install_packages.py'],
-            check=True,  # This will raise an exception if the command fails
-            text=True    # This ensures the output is captured as a string
-        )
-        # print("Output:", result.stdout)
-    except subprocess.CalledProcessError as e:
-        print("An error occurred while running the installation script.")
-        print("Error message:", e.stderr)
 
 def main(args):
 
-    # Install missing packages
-    run_installation_script()
+
 
     # Load configuration
     opt = optimiser.GradientDescentoptimiser('config.yaml')
@@ -49,6 +36,7 @@ def main(args):
     opt.run()
 
 if __name__ == '__main__':
+    
     # Parse arguments
     args = parse_arguments()
     
